@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Secure</title>
+  <script src="/config.js"></script>
+  <style>
+    :root {
+      --bg0: #050805;
+      --bg1: #0a120a;
+      --panel: #0f1a0f;
+      --border: #1a331a;
+      --text: #4ade80;
+      --muted: #166534;
+      --accent: #f97316;
+      --good: #22c55e;
+      --warn: #ea580c;
+      --scanline: rgba(74, 222, 128, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      border-radius: 0 !important;
+    }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background: linear-gradient(180deg, var(--bg0), var(--bg1));
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 1px,
+          var(--scanline) 2px,
+          var(--scanline) 3px);
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 26px;
+      border-bottom: 2px solid var(--border);
+      background: rgba(10, 18, 10, 0.8);
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      background: var(--text);
+      border: 2px solid var(--border);
+      box-shadow: 0 0 10px var(--text);
+    }
+
+    .brand h1 {
+      font-size: 16px;
+      margin: 0;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      text-transform: uppercase;
+    }
+
+    main {
+      padding: 26px;
+    }
+
+    .card {
+      max-width: 820px;
+      padding: 18px;
+      border: 2px solid var(--border);
+      background: rgba(15, 26, 15, 0.9);
+      box-shadow: 5px 5px 0px var(--border);
+    }
+
+    .row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .title {
+      font-size: 20px;
+      margin: 0;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      background: var(--muted);
+      display: inline-block;
+    }
+
+    .dot.pulse {
+      background: var(--warn);
+      box-shadow: 0 0 10px var(--warn);
+      animation: blink 1s infinite steps(1);
+    }
+
+    .dot.green {
+      background: var(--good);
+      box-shadow: 0 0 10px var(--good);
+    }
+
+    @keyframes blink {
+      0% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
+    }
+
+    button {
+      padding: 10px 14px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 2px solid var(--text);
+      background: transparent;
+      color: var(--text);
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background: var(--text);
+      color: var(--bg0);
+    }
+
+    button:disabled {
+      opacity: .3;
+      cursor: not-allowed;
+      background: transparent;
+      color: var(--muted);
+      border-color: var(--muted);
+    }
+
+    code {
+      background: rgba(74, 222, 128, 0.1);
+      padding: 2px 6px;
+      border: 1px solid var(--muted);
+      color: var(--text);
+    }
+
+    .flag {
+      margin-top: 12px;
+      padding: 10px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 2px solid var(--good);
+    }
+
+    .kv {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .kv strong {
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Secure</h1>
+        <div class="sub">Identity-backed access to your internal vault</div>
+      </div>
+    </div>
+    <div class="kv muted">
+      <span class="dot" id="statusDot"></span>
+      <span id="statusText">disconnected</span>
+    </div>
+  </header>
+
+  <main>
+    <div class="card">
+      <div class="row">
+        <div>
+          <p class="title">Vault Dashboard</p>
+          <p class="muted" style="margin:6px 0 0 0">Connect via <code>CorpSSO</code> to unlock protected widgets.</p>
+        </div>
+        <div>
+          <button id="loginBtn">Connect CorpSSO</button>
+        </div>
+      </div>
+
+      <div style="margin-top:14px" id="status" class="muted"></div>
+      <div id="flag" class="flag" style="display:none"></div>
+    </div>
+  </main>
+
+  <script>
+    const OAUTH_URL = (window.__CFG__ && window.__CFG__.OAUTH_URL) || "http://rumpelstiltskin-auth.ctf.ingeniums.club";
+    let authPopup = null;
+
+    // In a real application, the user needs to actually complete authentication.
+    // E.g. prompt for username and password at the SSO.
+
+    async function refresh() {
+      const res = await fetch("/api/me");
+      const data = await res.json();
+      const status = document.getElementById("status");
+      const flag = document.getElementById("flag");
+      const dot = document.getElementById("statusDot");
+      const text = document.getElementById("statusText");
+
+      if (!data.loggedIn) {
+        status.textContent = "Session: none";
+        dot.className = "dot";
+        text.textContent = "disconnected";
+        flag.style.display = "none";
+        flag.textContent = "";
+        return;
+      }
+
+      status.textContent = `Session: ${data.user}`;
+      dot.className = "dot green";
+      text.textContent = `authenticated as ${data.user}`;
+      if (data.flag) {
+        flag.style.display = "block";
+        flag.textContent = `Flag: ${data.flag}`;
+      } else {
+        flag.style.display = "none";
+        flag.textContent = "";
+      }
+    }
+
+    document.getElementById("loginBtn").addEventListener("click", () => {
+      document.getElementById("loginBtn").disabled = true;
+      document.getElementById("statusDot").className = "dot pulse";
+      document.getElementById("statusText").textContent = "opening CorpSSO auth...";
+
+      const redirectUri = `${location.origin}/oauth-finish.html`;
+      const url = new URL(`${OAUTH_URL}/authorize`);
+      url.searchParams.set("response_type", "code");
+      url.searchParams.set("client_id", "corp-portal");
+      url.searchParams.set("redirect_uri", redirectUri);
+      url.searchParams.set("state", "not-validated");
+
+      // Vulnerability: fixed predictable window name target.
+      authPopup = window.open(url.toString(), "oauthPopup", "width=520,height=620");
+    });
+
+    // Attempts to ensure messages come from the stored popup reference.
+    window.addEventListener("message", async (event) => {
+      if (!event || !event.data) return;
+      if (event.source !== authPopup) return;
+      if (event.data.type !== "oauth_callback") return;
+      const code = event.data.code;
+      if (typeof code !== "string") return;
+
+      console.log("I'm before login :)")
+      console.log(code)
+      await fetch("/api/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ code })
+      });
+
+      document.getElementById("loginBtn").disabled = false;
+      await refresh();
+    });
+
+    refresh();
+  </script>
+</body>
+
+</html>

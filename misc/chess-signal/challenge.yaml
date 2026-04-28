@@ -1,0 +1,28 @@
+name: chess-signal
+author: 4ym3n
+difficulty: easy
+
+description: |-
+  not a chess fun
+  `{{ host }}`
+
+flag: ingehack{you_cant_play_this_by_sight}
+
+provide:
+  - files.zip
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 8000
+      readOnlyRootFilesystem: false
+
+expose:
+  main:
+    - target: 8000
+      http: chess_signal.ctf.ingeniums.club
+
+visible: true
+deployed: true

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Profile - {{ app_name }}</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #241914;
+        --muted: #765f52;
+        --paper: #fff8ec;
+        --paper-strong: #fffdf8;
+        --stamp: #b6422f;
+        --stamp-dark: #7f271f;
+        --line: rgba(60, 39, 26, 0.18);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 16% 18%, rgba(182, 66, 47, 0.17), transparent 28%),
+          radial-gradient(circle at 82% 12%, rgba(233, 174, 88, 0.26), transparent 30%),
+          linear-gradient(135deg, #ead7b8 0%, #f9ecd4 48%, #d9bea0 100%);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(36, 25, 20, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(36, 25, 20, 0.035) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mix-blend-mode: multiply;
+      }
+      .wrap {
+        width: min(940px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 56px;
+      }
+      .topbar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font: 700 1rem/1 "Courier New", monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--stamp-dark);
+      }
+      .envelope {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--paper-strong), var(--paper));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: 0 30px 80px rgba(64, 37, 20, 0.22);
+        padding: clamp(28px, 6vw, 56px);
+      }
+      .envelope::after {
+        content: "";
+        position: absolute;
+        inset: auto -12% -42% -12%;
+        height: 64%;
+        background: linear-gradient(135deg, transparent 49.6%, rgba(127, 39, 31, 0.12) 50%, transparent 50.4%), linear-gradient(45deg, transparent 49.6%, rgba(127, 39, 31, 0.12) 50%, transparent 50.4%);
+        pointer-events: none;
+      }
+      .content { position: relative; z-index: 1; }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        color: var(--stamp-dark);
+        font: 700 0.78rem/1.2 "Courier New", monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--stamp);
+        box-shadow: 0 0 0 6px rgba(182, 66, 47, 0.12);
+      }
+      h1 {
+        max-width: 760px;
+        margin: 0;
+        font-size: clamp(2.3rem, 8vw, 5.4rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+      }
+      .lead {
+        max-width: 660px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.3rem);
+        line-height: 1.6;
+      }
+      .profile-grid {
+        display: grid;
+        gap: 18px;
+        margin-top: 34px;
+      }
+      .profile-row {
+        display: grid;
+        grid-template-columns: 170px 1fr;
+        gap: 16px;
+        padding: 18px;
+        border: 1px dashed rgba(127, 39, 31, 0.38);
+        border-radius: 18px;
+        background: rgba(255, 253, 248, 0.72);
+      }
+      .label {
+        color: var(--stamp-dark);
+        font: 700 0.78rem/1.2 "Courier New", monospace;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+      .value {
+        overflow-wrap: anywhere;
+        margin: 0;
+        color: var(--ink);
+        font-size: 1.08rem;
+      }
+      .secret {
+        padding: 18px;
+        border-radius: 14px;
+        background: #241914;
+        color: #fff8ec;
+        font: 700 clamp(1rem, 2vw, 1.25rem)/1.5 "Courier New", monospace;
+      }
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+      a.button, button.button {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--stamp);
+        color: #fffdf8;
+        cursor: pointer;
+        font: 700 0.95rem/1 "Courier New", monospace;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+      .button.secondary {
+        background: transparent;
+        color: var(--stamp-dark);
+        border: 1px solid rgba(127, 39, 31, 0.35);
+      }
+      @media (max-width: 640px) {
+        .wrap { padding: 24px 0; }
+        .topbar { align-items: flex-start; flex-direction: column; }
+        .envelope { border-radius: 20px; }
+        .profile-row { grid-template-columns: 1fr; }
+        a.button, button.button { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <nav class="topbar" aria-label="Primary">
+        <div class="brand">{{ app_name }}</div>
+        <a class="button secondary" href="{{ url_for('index') }}">Dashboard</a>
+      </nav>
+
+      <section class="envelope">
+        <div class="content">
+          <div class="eyebrow"><span class="dot"></span> private profile</div>
+          <h1>Account holder data.</h1>
+          <p class="lead">Profile details for {{ user.account_name }}.</p>
+
+          <section class="profile-grid" aria-label="Profile details">
+            <div class="profile-row">
+              <div class="label">Username</div>
+              <p class="value">{{ user.username }}</p>
+            </div>
+            <div class="profile-row">
+              <div class="label">Email</div>
+              <p class="value">{{ user.email }}</p>
+            </div>
+            <div class="profile-row">
+              <div class="label">Balance</div>
+              <p class="value">{{ user.balance }}</p>
+            </div>
+            {% if mfa_pending %}
+              <div class="profile-row">
+                <div class="label">2FA status</div>
+                <p class="value">Email verification is still pending for this session.</p>
+              </div>
+            {% endif %}
+            <div class="profile-row">
+              <div class="label">Secret</div>
+              <p class="value secret">{{ flag }}</p>
+            </div>
+          </section>
+
+          <div class="button-row">
+            <form method="post" action="{{ url_for('logout') }}">
+              <button class="button secondary" type="submit">Logout</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

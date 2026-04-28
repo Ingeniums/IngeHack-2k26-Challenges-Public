@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTF :: Chess Signal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --board-size: 16;
+    --bg: #050b08;
+    --panel: rgba(6, 19, 14, 0.92);
+    --line: #1d5a42;
+    --line-soft: rgba(29, 90, 66, 0.35);
+    --text: #d5f8df;
+    --muted: #76b08f;
+    --signal: #95ffb9;
+    --gold: #ffd86b;
+    --alert: #ff7f6b;
+    --square-light: #d9d0bc;
+    --square-dark: #3a5f4f;
+    --square-target-glow: rgba(255, 93, 141, 0.34);
+    --square-select: #1f8d68;
+    --shadow: 0 24px 90px rgba(0, 0, 0, 0.45);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    min-height: 100vh;
+    color: var(--text);
+    font-family: "Space Mono", monospace;
+    background:
+      radial-gradient(circle at top left, rgba(26, 91, 62, 0.28), transparent 32%),
+      radial-gradient(circle at top right, rgba(255, 216, 107, 0.08), transparent 24%),
+      linear-gradient(180deg, #08110d 0%, #030705 100%);
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+    opacity: 0.2;
+  }
+
+  .shell {
+    width: min(1380px, calc(100vw - 24px));
+    margin: 20px auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero,
+  .layout,
+  .win-banner {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(8px);
+  }
+
+  .hero {
+    padding: 22px 24px 18px;
+    background:
+      linear-gradient(135deg, rgba(149, 255, 185, 0.08), transparent 34%),
+      linear-gradient(180deg, rgba(8, 24, 18, 0.96), rgba(5, 14, 10, 0.96));
+  }
+
+  .hero-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .crumb {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  h1 {
+    font-family: "VT323", monospace;
+    font-size: clamp(48px, 8vw, 84px);
+    line-height: 0.92;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--signal);
+    text-shadow: 0 0 22px rgba(149, 255, 185, 0.34);
+  }
+
+  h1 span {
+    color: var(--gold);
+    text-shadow: 0 0 18px rgba(255, 216, 107, 0.35);
+  }
+
+  .subtitle {
+    max-width: 820px;
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+
+  .hero-side {
+    min-width: 230px;
+    padding: 12px 14px;
+    border: 1px solid var(--line-soft);
+    background: rgba(0, 0, 0, 0.18);
+  }
+
+  .score-label,
+  .score-sub {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .score-value {
+    font-family: "VT323", monospace;
+    font-size: 68px;
+    line-height: 0.9;
+    color: var(--gold);
+    margin: 8px 0 4px;
+  }
+
+  .layout {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.8fr);
+  }
+
+  .main-pane {
+    border-right: 1px solid var(--line);
+  }
+
+  .section {
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .section:last-child {
+    border-bottom: none;
+  }
+
+  .section-header {
+    padding: 10px 16px;
+    background: rgba(149, 255, 185, 0.06);
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .section-body {
+    padding: 18px 16px;
+  }
+
+  .brief {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+  }
+
+  .rules {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .rule-card {
+    padding: 12px;
+    border: 1px solid var(--line-soft);
+    background: rgba(255, 255, 255, 0.02);
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .rule-card strong {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--signal);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+  }
+
+  .board-shell {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .rank-labels,
+  .file-labels {
+    display: grid;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .rank-labels {
+    grid-template-rows: repeat(var(--board-size), minmax(24px, 1fr));
+    align-items: center;
+  }
+
+  .board-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(var(--board-size), minmax(30px, 1fr));
+    aspect-ratio: 1;
+    border: 1px solid var(--line);
+    background: #101812;
+  }
+
+  .square {
+    position: relative;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(16px, 1.8vw, 28px);
+    cursor: pointer;
+    transition: filter 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .square.light { background: var(--square-light); color: #133225; }
+  .square.dark { background: var(--square-dark); color: #eff6ef; }
+
+  .square.target::before {
+    content: "";
+    position: absolute;
+    inset: 24%;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 224, 234, 0.55);
+    box-shadow: 0 0 14px rgba(255, 93, 141, 0.3);
+  }
+
+  .square.target {
+    box-shadow: inset 0 0 0 2px rgba(255, 143, 177, 0.45);
+    background-image: radial-gradient(circle at center, var(--square-target-glow), transparent 58%);
+  }
+
+  .square.selected {
+    box-shadow: inset 0 0 0 3px var(--square-select), 0 0 0 1px var(--square-select);
+  }
+
+  .square.locked {
+    box-shadow: inset 0 0 0 3px rgba(255, 216, 107, 0.65);
+  }
+
+  .square:hover {
+    filter: brightness(1.05);
+  }
+
+  .piece-glyph {
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.22);
+  }
+
+  .file-labels {
+    grid-template-columns: repeat(var(--board-size), minmax(30px, 1fr));
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+    align-items: center;
+  }
+
+  .value-input {
+    width: 120px;
+    border: 1px solid var(--line);
+    background: rgba(0, 0, 0, 0.25);
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 13px;
+  }
+
+  .btn {
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--text);
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .btn:hover {
+    border-color: var(--signal);
+    background: rgba(149, 255, 185, 0.07);
+  }
+
+  .terminal {
+    min-height: 220px;
+    max-height: 360px;
+    overflow: auto;
+    background: rgba(0, 0, 0, 0.32);
+    border: 1px solid var(--line-soft);
+    padding: 12px 14px;
+    font-size: 12px;
+    line-height: 1.7;
+  }
+
+  .terminal-line {
+    display: flex;
+    gap: 8px;
+  }
+
+  .prompt {
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .out-info { color: var(--muted); }
+  .out-good { color: var(--signal); }
+  .out-warn { color: var(--gold); }
+  .out-bad { color: var(--alert); }
+
+  .status-card,
+  .piece-card {
+    border: 1px solid var(--line-soft);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .status-grid,
+  .piece-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .status-card,
+  .piece-card {
+    padding: 12px;
+  }
+
+  .status-label {
+    color: var(--muted);
+    text-transform: uppercase;
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    margin-bottom: 8px;
+  }
+
+  .status-value {
+    color: var(--signal);
+    font-family: "VT323", monospace;
+    font-size: 34px;
+    line-height: 1;
+  }
+
+  .status-sub,
+  .piece-meta,
+  .piece-route {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 5px;
+    line-height: 1.6;
+  }
+
+  .piece-card.active {
+    border-color: var(--signal);
+  }
+
+  .piece-card.locked {
+    border-color: rgba(255, 216, 107, 0.55);
+  }
+
+  .piece-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .piece-title {
+    font-size: 12px;
+    color: var(--signal);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .banner-note {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px dashed var(--line-soft);
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+  }
+
+  .win-banner {
+    display: none;
+    margin-top: 18px;
+    padding: 18px 22px;
+    background:
+      linear-gradient(135deg, rgba(255, 216, 107, 0.12), transparent 36%),
+      linear-gradient(180deg, rgba(10, 24, 18, 0.98), rgba(5, 12, 9, 0.98));
+  }
+
+  .win-banner.show {
+    display: block;
+  }
+
+  .win-title {
+    color: var(--signal);
+    font-family: "VT323", monospace;
+    font-size: 38px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .win-flag {
+    margin-top: 10px;
+    padding: 12px 14px;
+    border: 1px solid rgba(255, 216, 107, 0.35);
+    background: rgba(255, 216, 107, 0.08);
+    color: var(--gold);
+    font-size: clamp(14px, 2.1vw, 18px);
+    word-break: break-word;
+  }
+
+  .win-sub {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  @media (max-width: 980px) {
+    .layout {
+      grid-template-columns: 1fr;
+    }
+
+    .main-pane {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .shell {
+      width: min(100vw - 14px, 100%);
+      margin: 8px auto 18px;
+    }
+
+    .hero,
+    .section-body {
+      padding-left: 12px;
+      padding-right: 12px;
+    }
+
+    .rules,
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .board-shell {
+      grid-template-columns: 22px minmax(0, 1fr);
+    }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <section class="hero">
+    <div class="hero-top">
+      <div>
+        <div class="crumb">INGEHACK_CTF &gt; MISC &gt; CHALLENGE_12</div>
+        <h1>Chess <span>Signal</span></h1>
+        <p class="subtitle">
+          Select a piece. Submit a value. Watch the board.
+        </p>
+      </div>
+      <div class="hero-side">
+        <div class="score-label">Board status</div>
+        <div class="score-value" id="scoreValue">0/0</div>
+        <div class="score-sub">Locked squares</div>
+      </div>
+    </div>
+  </section>
+
+  <main class="layout">
+    <div class="main-pane">
+      <section class="section">
+        <div class="section-header">Mission</div>
+        <div class="section-body">
+          <p class="brief">
+            Select a piece, enter a value from `0` to `255`, then submit it.
+          </p>
+          <div class="rules">
+            <div class="rule-card">
+              <strong>Rule 1</strong>
+              Movement follows real chess rules only.
+            </div>
+            <div class="rule-card">
+              <strong>Rule 2</strong>
+              Marked cells matter.
+            </div>
+            <div class="rule-card">
+              <strong>Rule 3</strong>
+              Invalid selections are rejected.
+            </div>
+            <div class="rule-card">
+              <strong>Rule 4</strong>
+              If the state is correct, output appears.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">Board</div>
+        <div class="section-body">
+          <div class="board-shell">
+            <div class="rank-labels" id="rankLabels"></div>
+            <div class="board-wrap">
+              <div class="board" id="board"></div>
+              <div class="file-labels" id="fileLabels"></div>
+            </div>
+          </div>
+          <div class="controls">
+            <button class="btn" id="resetBtn" type="button">Reset Session</button>
+            <button class="btn" id="refreshBtn" type="button">Refresh State</button>
+            <input class="value-input" id="valueInput" type="number" min="0" max="255" step="1" placeholder="value">
+            <button class="btn" id="sendValueBtn" type="button">Send</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">Terminal Output</div>
+        <div class="section-body">
+          <div class="terminal" id="terminal"></div>
+        </div>
+      </section>
+    </div>
+
+    <aside class="side-pane">
+      <section class="section">
+        <div class="section-header">Session</div>
+        <div class="section-body">
+          <div class="status-grid">
+            <div class="status-card">
+              <div class="status-label">Board</div>
+              <div class="status-value" id="boardSizeValue">16</div>
+              <div class="status-sub">width and height</div>
+            </div>
+            <div class="status-card">
+              <div class="status-label">Pieces</div>
+              <div class="status-value" id="pieceCountValue">0</div>
+              <div class="status-sub">active at reset</div>
+            </div>
+            <div class="status-card">
+              <div class="status-label">Protected</div>
+              <div class="status-value" id="targetCountValue">0</div>
+              <div class="status-sub">visible cells</div>
+            </div>
+            <div class="status-card">
+              <div class="status-label">Locked</div>
+              <div class="status-value" id="lockedValue">0</div>
+              <div class="status-sub">correct placements</div>
+            </div>
+          </div>
+          <div class="banner-note">
+            The board does not explain itself.
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">Pieces</div>
+        <div class="section-body">
+          <div class="piece-grid" id="pieceGrid"></div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <section class="win-banner" id="winBanner">
+    <div class="win-title">Access Granted</div>
+    <div class="win-flag" id="winFlag"></div>
+    <div class="win-sub">Server validation accepted the board state.</div>
+  </section>
+</div>
+
+<script>
+  let state = null;
+  let selectedPieceId = null;
+
+  const boardEl = document.getElementById("board");
+  const terminalEl = document.getElementById("terminal");
+  const pieceGridEl = document.getElementById("pieceGrid");
+  const scoreValueEl = document.getElementById("scoreValue");
+  const boardSizeValueEl = document.getElementById("boardSizeValue");
+  const pieceCountValueEl = document.getElementById("pieceCountValue");
+  const targetCountValueEl = document.getElementById("targetCountValue");
+  const lockedValueEl = document.getElementById("lockedValue");
+  const winBannerEl = document.getElementById("winBanner");
+  const winFlagEl = document.getElementById("winFlag");
+  const valueInputEl = document.getElementById("valueInput");
+
+  document.getElementById("resetBtn").addEventListener("click", async () => {
+    const response = await apiPost("/api/reset", {});
+    if (response) {
+      selectedPieceId = null;
+      applyState(response.state);
+      printLine(response.message, response.ok ? "out-info" : "out-bad");
+    }
+  });
+
+  document.getElementById("refreshBtn").addEventListener("click", async () => {
+    const fresh = await apiGet("/api/state");
+    if (fresh) {
+      applyState(fresh);
+      printLine("State refreshed from server.", "out-info");
+    }
+  });
+
+  document.getElementById("sendValueBtn").addEventListener("click", async () => {
+    await submitValue();
+  });
+
+  valueInputEl.addEventListener("keydown", async (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      await submitValue();
+    }
+  });
+
+  async function apiGet(path) {
+    try {
+      const response = await fetch(path, { credentials: "same-origin" });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      printLine(`Request failed: ${error.message}`, "out-bad");
+      return null;
+    }
+  }
+
+  async function apiPost(path, payload) {
+    try {
+      const response = await fetch(path, {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const body = await response.json();
+      if (!response.ok) {
+        throw new Error(body.message || `HTTP ${response.status}`);
+      }
+      return body;
+    } catch (error) {
+      printLine(`Request failed: ${error.message}`, "out-bad");
+      return null;
+    }
+  }
+
+  function applyState(nextState) {
+    state = nextState;
+    document.documentElement.style.setProperty("--board-size", String(state.board_size));
+    renderStaticLabels();
+    renderBoard();
+    renderSidebar();
+
+    if (state.solved && state.flag) {
+      winBannerEl.classList.add("show");
+      winFlagEl.textContent = state.flag;
+    } else {
+      winBannerEl.classList.remove("show");
+      winFlagEl.textContent = "";
+    }
+  }
+
+  function renderStaticLabels() {
+    document.getElementById("rankLabels").innerHTML = state.ranks.map((rank) => `<div>${rank}</div>`).join("");
+    document.getElementById("fileLabels").innerHTML = state.files.map((file) => `<div>${file}</div>`).join("");
+  }
+
+  function renderBoard() {
+    const pieceByPos = new Map(state.pieces.map((piece) => [piece.position, piece]));
+    const targetSet = new Set(state.targets);
+    boardEl.innerHTML = "";
+
+    for (const rank of state.ranks) {
+      for (const file of state.files) {
+        const square = `${file}${rank}`;
+        const x = state.files.indexOf(file);
+        const y = state.board_size - rank;
+        const isLight = (x + y) % 2 === 0;
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `square ${isLight ? "light" : "dark"}`;
+
+        if (targetSet.has(square)) {
+          btn.classList.add("target");
+        }
+
+        const piece = pieceByPos.get(square);
+        if (piece) {
+          if (piece.id === selectedPieceId) {
+            btn.classList.add("selected");
+          }
+          if (piece.locked) {
+            btn.classList.add("locked");
+          }
+          const glyph = document.createElement("span");
+          glyph.className = "piece-glyph";
+          glyph.textContent = piece.glyph;
+          btn.appendChild(glyph);
+        }
+
+        btn.addEventListener("click", () => handleSquareClick(square));
+        boardEl.appendChild(btn);
+      }
+    }
+  }
+
+  function renderSidebar() {
+    const lockedCount = state.pieces.filter((piece) => piece.locked).length;
+    scoreValueEl.textContent = `${lockedCount}/${state.pieces.length}`;
+    boardSizeValueEl.textContent = String(state.board_size);
+    pieceCountValueEl.textContent = String(state.pieces.length);
+    targetCountValueEl.textContent = String(state.targets.length);
+    lockedValueEl.textContent = String(lockedCount);
+
+    pieceGridEl.innerHTML = state.pieces.map((piece) => {
+      const classes = [
+        "piece-card",
+        piece.locked ? "locked" : "",
+        piece.id === selectedPieceId ? "active" : ""
+      ].filter(Boolean).join(" ");
+
+      return `
+        <div class="${classes}">
+          <div class="piece-head">
+            <div class="piece-title">${piece.glyph} ${piece.label}</div>
+            <div class="piece-meta">${piece.position}${piece.locked ? " | locked" : ""}</div>
+          </div>
+          <div class="piece-route">Movement: ${piece.type}</div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  async function handleSquareClick(square) {
+    const piece = state.pieces.find((entry) => entry.position === square);
+
+    if (piece && !piece.locked && (!selectedPieceId || selectedPieceId === piece.id)) {
+      selectedPieceId = selectedPieceId === piece.id ? null : piece.id;
+      renderBoard();
+      renderSidebar();
+      printLine(
+        selectedPieceId ? `${piece.label} selected at ${piece.position}.` : `Selection cleared from ${piece.label}.`,
+        "out-info"
+      );
+      return;
+    }
+
+    if (!selectedPieceId) {
+      printLine(`No piece selected at ${square}.`, "out-bad");
+      return;
+    }
+    printLine(`Input required for ${state.pieces.find((entry) => entry.id === selectedPieceId)?.label || "selected piece"}.`, "out-info");
+  }
+
+  async function submitValue() {
+    if (!selectedPieceId) {
+      printLine("No piece selected.", "out-bad");
+      return;
+    }
+
+    const value = Number(valueInputEl.value);
+    if (!Number.isInteger(value) || value < 0 || value > 255) {
+      printLine("Value must be an integer from 0 to 255.", "out-bad");
+      return;
+    }
+
+    const response = await apiPost("/api/move", {
+      piece_id: selectedPieceId,
+      value
+    });
+
+    if (!response) {
+      return;
+    }
+
+    selectedPieceId = null;
+    valueInputEl.value = "";
+    applyState(response.state);
+    printLine(response.message, response.ok ? (response.state.solved ? "out-warn" : "out-good") : "out-bad");
+    if (response.flag) {
+      printLine(`Final flag: ${response.flag}`, "out-good");
+    }
+  }
+
+  function printLine(text, className) {
+    const line = document.createElement("div");
+    line.className = "terminal-line";
+    line.innerHTML = `<span class="prompt">$&gt;</span><span class="${className}">${escapeHtml(text)}</span>`;
+    terminalEl.appendChild(line);
+    terminalEl.scrollTop = terminalEl.scrollHeight;
+  }
+
+  function escapeHtml(value) {
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
+  async function boot() {
+    printLine("Connecting to challenge service...", "out-info");
+    const fresh = await apiGet("/api/state");
+    if (fresh) {
+      applyState(fresh);
+      printLine("Session ready.", "out-info");
+    }
+  }
+
+  boot();
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+name: canaries
+author: t4k1
+difficulty: easy
+
+description: |-
+  since stack canaries worked so well last time, i decided to double on the idea     
+  now no one can hack us     
+  `{{ nc }}`
+
+flag: ingehack{C00k13_w45_7h3_b357_0f_7h3m_1284asd651328}
+
+provide:
+  - Dockerfile
+  - entrypoint.sh
+  - main
+  - run.sh
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 6702
+
+expose:
+  main:
+    - target: 6702
+      tcp: canaries.ctf.ingeniums.club
+
+visible: true
+deployed: true

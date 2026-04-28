@@ -1,0 +1,50 @@
+diff --git a/Makefile b/Makefile
+index b262c0a..04f3fae 100644
+--- a/Makefile
++++ b/Makefile
+@@ -145,6 +145,7 @@ UPROGS=\
+ 	$U/_logstress\
+ 	$U/_forphan\
+ 	$U/_dorphan\
++	$U/_makefile\
+ 
+ fs.img: mkfs/mkfs README $(UPROGS)
+ 	mkfs/mkfs fs.img README $(UPROGS)
+diff --git a/kernel/main.c b/kernel/main.c
+index f0d3171..9fc71fe 100644
+--- a/kernel/main.c
++++ b/kernel/main.c
+@@ -5,6 +5,7 @@
+ #include "defs.h"
+ 
+ volatile static int started = 0;
++char* flag = "ingehack{XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX}";
+ 
+ // start() jumps here in supervisor mode on all CPUs.
+ void
+diff --git a/kernel/syscall.c b/kernel/syscall.c
+index 076d965..24176c8 100644
+--- a/kernel/syscall.c
++++ b/kernel/syscall.c
+@@ -135,7 +135,7 @@ syscall(void)
+   struct proc *p = myproc();
+ 
+   num = p->trapframe->a7;
+-  if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
++  if(syscalls[num]) {
+     // Use num to lookup the system call function for num, call it,
+     // and store its return value in p->trapframe->a0
+     p->trapframe->a0 = syscalls[num]();
+diff --git a/kernel/vm.c b/kernel/vm.c
+index 28f4248..c399f78 100644
+--- a/kernel/vm.c
++++ b/kernel/vm.c
+@@ -39,7 +39,7 @@ kvmmake(void)
+   kvmmap(kpgtbl, KERNBASE, KERNBASE, (uint64)etext-KERNBASE, PTE_R | PTE_X);
+ 
+   // map kernel data and the physical RAM we'll make use of.
+-  kvmmap(kpgtbl, (uint64)etext, (uint64)etext, PHYSTOP-(uint64)etext, PTE_R | PTE_W);
++  kvmmap(kpgtbl, (uint64)etext, (uint64)etext, PHYSTOP-(uint64)etext, PTE_R | PTE_W | PTE_X);
+ 
+   // map the trampoline for trap entry/exit to
+   // the highest virtual address in the kernel.

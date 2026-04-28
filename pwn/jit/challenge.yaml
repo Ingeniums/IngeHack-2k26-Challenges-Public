@@ -1,0 +1,33 @@
+name: jit
+author: t4k1
+difficulty: medium
+
+description: |-
+  what do you mean jit?     
+  isn't that just c with extra steps      
+
+  `{{ nc }}`
+
+flag: ingehack{i_c4n_c_th4t_y0u_4r3_4_3mb3dd3d_l4ng5_h4ck3r_9846567846321687}
+
+provide:
+  - Dockerfile
+  - entrypoint.sh
+  - main.lua
+  - main
+  - run.sh
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 6702
+
+expose:
+  main:
+    - target: 6702
+      tcp: jit.ctf.ingeniums.club
+
+visible: true
+deployed: true

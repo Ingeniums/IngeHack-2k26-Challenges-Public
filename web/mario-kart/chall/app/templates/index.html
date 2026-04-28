@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="page-head">
+    <div>
+      <h1>Parts, passes, and garage credit.</h1>
+      <p class="lead">
+        New racers receive {{ bonus }} in garage credit. The featured kart is listed at {{ target }}.
+      </p>
+    </div>
+    <div class="card stat">
+      <strong>Wallet balance</strong>
+      <span>{{ "$%.2f"|format(wallet.balance_cents / 100) }}</span>
+    </div>
+  </section>
+
+  {% if user %}
+    <section class="card" style="margin-bottom: 14px;">
+      <strong>{{ user.username }}</strong>
+      <p class="muted" style="margin: 8px 0 0;">
+        Garage wallet owner: {{ wallet.wallet_owner }}.
+      </p>
+      {% if not claimed %}
+        <form method="post" action="{{ url_for('claim_form') }}">
+          <button type="submit">Claim garage credit</button>
+        </form>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  <section class="grid" aria-label="Garage products">
+    {% for product in products %}
+      <article class="card stack">
+        <div>
+          <strong>{{ product.name }}</strong>
+          <p class="muted">{{ product.description }}</p>
+        </div>
+        <div>
+          <strong>{{ product.price }}</strong>
+          <form method="post" action="{{ url_for('purchase_form') }}">
+            <input type="hidden" name="item" value="{{ product.id }}" />
+            <button class="{% if product.id != target_item_id %}secondary{% endif %}" type="submit">Buy</button>
+          </form>
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}

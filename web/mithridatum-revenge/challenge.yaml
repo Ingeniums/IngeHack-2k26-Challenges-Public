@@ -1,0 +1,13 @@
+name: mithridatum-revenge
+author: hxuu
+difficulty: hard
+
+description: |-
+  Nothing to be said...
+
+  handout: https://github.com/fooagen/{TEAM_NAME_ALL_LOWERCASE_DASHES_INSTEAD_OF_UNDERSCORES_OR_$}
+
+flag: 'ingehack{Impost3r_c0mmiT_B3tter_ThaN_SynDr0me}'
+
+visible: true
+deployed: true

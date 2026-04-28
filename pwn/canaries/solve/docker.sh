@@ -1,0 +1,1 @@
+docker run --privileged --pid=host -p 5008:5000 -p 4545:4545 -t asd 

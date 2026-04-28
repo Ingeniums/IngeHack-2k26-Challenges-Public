@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ app_name }}</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #241914;
+        --muted: #765f52;
+        --paper: #fff8ec;
+        --paper-strong: #fffdf8;
+        --stamp: #b6422f;
+        --stamp-dark: #7f271f;
+        --line: rgba(60, 39, 26, 0.18);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 16% 18%, rgba(182, 66, 47, 0.17), transparent 28%),
+          radial-gradient(circle at 82% 12%, rgba(233, 174, 88, 0.26), transparent 30%),
+          linear-gradient(135deg, #ead7b8 0%, #f9ecd4 48%, #d9bea0 100%);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(36, 25, 20, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(36, 25, 20, 0.035) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mix-blend-mode: multiply;
+      }
+      .wrap {
+        width: min(940px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 32px 0 56px;
+      }
+      .topbar {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+      }
+      .brand {
+        font: 700 1rem/1 "Courier New", monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--stamp-dark);
+      }
+      .nav-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+      .envelope {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--paper-strong), var(--paper));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: 0 30px 80px rgba(64, 37, 20, 0.22);
+        padding: clamp(28px, 6vw, 56px);
+      }
+      .envelope::after {
+        content: "";
+        position: absolute;
+        inset: auto -12% -42% -12%;
+        height: 64%;
+        background: linear-gradient(135deg, transparent 49.6%, rgba(127, 39, 31, 0.12) 50%, transparent 50.4%), linear-gradient(45deg, transparent 49.6%, rgba(127, 39, 31, 0.12) 50%, transparent 50.4%);
+        pointer-events: none;
+      }
+      .content { position: relative; z-index: 1; }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        color: var(--stamp-dark);
+        font: 700 0.78rem/1.2 "Courier New", monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--stamp);
+        box-shadow: 0 0 0 6px rgba(182, 66, 47, 0.12);
+      }
+      h1 {
+        max-width: 780px;
+        margin: 0;
+        font-size: clamp(2.4rem, 8vw, 5.9rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+      }
+      .lead {
+        max-width: 660px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.3rem);
+        line-height: 1.6;
+      }
+      .bank-section {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 18px;
+        margin-top: 34px;
+        padding: 22px;
+        border: 1px dashed rgba(127, 39, 31, 0.38);
+        border-radius: 20px;
+        background: rgba(255, 253, 248, 0.72);
+      }
+      .account-card {
+        min-height: 190px;
+        border-radius: 20px;
+        padding: 22px;
+        background: #241914;
+        color: #fff8ec;
+        box-shadow: inset 0 0 0 1px rgba(255, 248, 236, 0.14);
+      }
+      .card-label {
+        margin: 0 0 48px;
+        color: rgba(255, 248, 236, 0.72);
+        font: 700 0.78rem/1.2 "Courier New", monospace;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+      .card-number {
+        margin: 0;
+        font: 700 clamp(1.1rem, 3vw, 1.6rem)/1.4 "Courier New", monospace;
+        letter-spacing: 0.08em;
+      }
+      .summary {
+        display: grid;
+        align-content: center;
+        gap: 14px;
+      }
+      .metric {
+        padding: 16px;
+        border-radius: 16px;
+        background: rgba(255, 248, 236, 0.68);
+        border: 1px solid var(--line);
+      }
+      .metric strong {
+        display: block;
+        font: 700 0.78rem/1.2 "Courier New", monospace;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--stamp-dark);
+      }
+      .metric span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+      }
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+      a.button, button.button {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--stamp);
+        color: #fffdf8;
+        cursor: pointer;
+        font: 700 0.95rem/1 "Courier New", monospace;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+      .button.secondary {
+        background: transparent;
+        color: var(--stamp-dark);
+        border: 1px solid rgba(127, 39, 31, 0.35);
+      }
+      .flash {
+        margin-bottom: 18px;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: rgba(255, 253, 248, 0.82);
+        border: 1px solid var(--line);
+        color: var(--stamp-dark);
+      }
+      @media (max-width: 760px) {
+        .bank-section { grid-template-columns: 1fr; }
+      }
+      @media (max-width: 640px) {
+        .wrap { padding: 24px 0; }
+        .topbar { align-items: flex-start; flex-direction: column; }
+        .nav-actions { width: 100%; }
+        .envelope { border-radius: 20px; }
+        a.button, button.button { width: 100%; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <nav class="topbar" aria-label="Primary">
+        <div class="brand">{{ app_name }}</div>
+        <div class="nav-actions">
+          <a class="button" href="{{ url_for('profile') }}">Profile</a>
+          <a class="button secondary" href="{{ url_for('login_page') }}">Login</a>
+        </div>
+      </nav>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      <section class="envelope">
+        <div class="content">
+          <div class="eyebrow"><span class="dot"></span> private banking portal</div>
+          <h1>Banking access for Ingenieums members.</h1>
+          <p class="lead">Manage balances, review transfers, and keep account secrets behind a second email check.</p>
+
+          <section class="bank-section" aria-label="Banking overview">
+            <div class="account-card">
+              <p class="card-label">ingebank reserve card</p>
+              <p class="card-number">4582 0931 7740 2219</p>
+            </div>
+            <div class="summary">
+              <div class="metric">
+                <strong>Profile vault</strong>
+                <span>Personal details and secret data are available from the profile area after login.</span>
+              </div>
+              <div class="metric">
+                <strong>Session status</strong>
+                <span>{% if user %}Password accepted. Email verification may still be pending.{% else %}If you want access to your content, you need to login first.{% endif %}</span>
+              </div>
+            </div>
+          </section>
+
+          <div class="button-row">
+            {% if user %}
+              <a class="button" href="{{ url_for('profile') }}">Open profile</a>
+              <form method="post" action="{{ url_for('logout') }}">
+                <button class="button secondary" type="submit">Logout</button>
+              </form>
+            {% else %}
+              <a class="button" href="{{ url_for('login_page') }}">Login</a>
+            {% endif %}
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

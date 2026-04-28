@@ -1,0 +1,10 @@
+{
+    "name": "bot",
+    "version": "1.0.0",
+    "description": "Puppeteer bot for challenge simulation",
+    "main": "server.js",
+    "dependencies": {
+        "express": "^4.18.2",
+        "puppeteer": "^19.7.2"
+    }
+}

@@ -1,0 +1,13 @@
+name: mithridatum
+author: hxuu
+difficulty: medium
+
+description: |-
+  My friends know how much I like docs. Do you?
+
+  handout: https://github.com/fooagen/{TEAM_NAME_ALL_LOWERCASE_DASHES_INSTEAD_OF_UNDERSCORES_OR_$}
+
+flag: 'ingehack{P0ison1nG_Th3_c4cHE_but_how_about_Th3_PAT?}'
+
+visible: true
+deployed: true

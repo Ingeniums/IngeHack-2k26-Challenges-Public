@@ -1,0 +1,60 @@
+name: aura farm
+author: sleep well
+category: web
+difficulty: hard
+
+description: |-
+  Buy the best aura bundle and find the hidden flag
+
+  link : https://aura-farm.ctf.ingeniums.club/
+  bot : https://aura-bot.ctf.ingeniums.club/
+
+flag: 'ingehack{hTTP_S3cUr1tY_HE4D3rS_GO_bRRrrRrrRRrr}'
+provide:
+  - chall.zip
+
+containers:
+  app:
+    challenge:
+      build: app
+      ports:
+        - 8000
+      environment:
+        PAYMENT_ORIGIN: 'https://aura-farm-payment.ctf.ingeniums.club'
+        BOT_SECRET: 'f9a585d5d3c90ac6a4ad6c23bea450718b3707c59aba45089189e6ca3edc2654'
+        FLAG: 'ingehack{hTTP_S3cUr1tY_HE4D3rS_GO_bRRrrRrrRRrr}'
+      readOnlyRootFilesystem: false
+  payment:
+    challenge:
+      build: payment
+      ports:
+        - 8000
+      environment:
+        APP_ORIGIN: 'https://aura-farm.ctf.ingeniums.club'
+      readOnlyRootFilesystem: false
+  bot:
+    challenge:
+      build: bot
+      ports:
+        - 8082
+      environment:
+        BOT_PORT: '8082'
+        BOT_TIMEOUT_MS: '15000'
+        BOT_NAVIGATION_WAIT_UNTIL: 'domcontentloaded'
+        BOT_APP_ORIGIN: 'https://aura-farm.ctf.ingeniums.club'
+        BOT_SECRET: 'f9a585d5d3c90ac6a4ad6c23bea450718b3707c59aba45089189e6ca3edc2654'
+      readOnlyRootFilesystem: false
+
+expose:
+  app:
+    - target: 8000
+      http: aura-farm.ctf.ingeniums.club
+  payment:
+    - target: 8000
+      http: aura-farm-payment.ctf.ingeniums.club
+  bot:
+    - target: 8082
+      http: aura-bot.ctf.ingeniums.club
+
+visible: true
+deployed: true

@@ -1,0 +1,19 @@
+# Keep this file in the root of your challenge directory.
+name: tfiws
+author: 4ym3n
+description: |-
+  This one’s easy; no need to overanalyze
+  [https://attachments.ingeniums.club/tfiws](https://attachments.ingeniums.club/tfiws)
+  [https://attachments.ingeniums.club/twifs.tar.gz](https://attachments.ingeniums.club/twifs.tar.gz)
+
+difficulty: warmup
+
+visible: true
+deployed: true
+
+flag: ingehack{0n3_l3tt3r_0p3ns_th3_r3ply_p4th}
+
+# These files are provided from the same directory as challenge.yaml.
+#provide:
+#  - tfiws
+#  - twifs.tar.gz

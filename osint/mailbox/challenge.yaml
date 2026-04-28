@@ -1,0 +1,17 @@
+name: "MailBox"
+author: "vuln3rat0r"
+difficulty: "Medium"
+
+description: |-
+  Received this pic from my friend he told me I am gonna send u a mail
+  ingehack{xx.xxx,xx.xxx}
+
+provide:
+  - pic.jpg
+
+flag: "ingehack{53.270,-6.185}"
+
+provide:
+  - pic.jpg
+
+visible: true

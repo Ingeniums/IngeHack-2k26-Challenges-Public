@@ -1,0 +1,16 @@
+name: pos
+author: t4k1
+difficulty: medium
+
+description: |-
+  our new point of sale system is broken,      
+  i think it needs a update       
+
+  [https://attachments.ingeniums.club/Pos.AppImage](https://attachments.ingeniums.club/Pos.AppImage)
+
+flag: ingehack{i_dont_know_what_to_write_here_copy_and_paste_please_:)))}
+
+provide:
+  - Pos.AppImage
+
+visible: true

@@ -1,0 +1,29 @@
+name: Js
+author: 4ym3n
+difficulty: medium
+
+description: |-
+  We built a bulletproof JavaScript sandbox using industry-leading technology.
+  Submit your code. Watch it run. But do not expect to get out.
+  `{{ host }}`
+
+provide:
+  - js.zip
+
+flag: ingehack{pr0m1s3_br0k3n_s4ndb0x_3sc4p3d}
+
+containers:
+  main:
+    challenge:
+      build: ./challenge
+      ports:
+        - 3000
+      readOnlyRootFilesystem: false
+
+expose:
+  main:
+    - target: 3000
+      http: js.ctf.ingeniums.club
+
+visible: true
+deployed: true

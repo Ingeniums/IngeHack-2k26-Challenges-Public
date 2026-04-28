@@ -1,0 +1,16 @@
+name: lateral-movement
+author: 4ym3n
+difficulty: hard
+
+description: |-
+  Active Directory
+  
+  Note: A local flag is also present on the 4ym3n machine at:
+  C:\Users\{highpriviligeduser}\Desktop\flag.txt
+
+
+
+flag: ingehack{s3c0nd_st4g3_#c91a2b38_pwn3d}
+
+visible: true
+deployed: true

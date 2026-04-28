@@ -1,0 +1,23 @@
+name: "The Leacker"
+author: "ayanokoji"
+difficulty: "Medium"
+
+description: |-
+  A former employee — Karim Benziane, Senior Consultant — resigned from the firm two weeks ago. The offboarding process appeared routine, with no immediate red flags.
+
+  Yesterday, a journalist reached out. A competitor is preparing to publish a story about a major executive departure at one of our key clients. The details in their draft closely match sensitive internal information that only a limited number of employees had access to.
+
+  We suspect Karim may have leaked confidential client intelligence before leaving the company.
+
+  As part of standard procedure, IT collected a forensic image of his workstation on his final day. That image is now in your possession.
+
+  Your task is to analyze the artifacts and uncover the leaked information.
+
+  Link : https://drive.google.com/file/d/1iQMpA23bgSWdFj0cLvEnVhW2X4uz91MZ/view?usp=drive_link 
+
+  The flag is composed of two parts that must be recovered separately and combined:
+
+  ingehack{leaked_secret_competitor_company_name}
+
+flag: "ingehack{CTO_3taha_atlas_advisory_partners}"
+visible: true

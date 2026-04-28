@@ -1,0 +1,19 @@
+name: LOTL
+author: 4ym3n
+difficulty: hard
+description: |-
+  Active Directory
+
+  Your objective is to perform a full compromise of the entire forest. 
+  Pivot through the environment, escalate privileges, and take control 
+  of the domain.
+
+  The final flag can be found on the domain controller machine.
+
+  Note: A local flag is also present on the DC  machine at:
+  C:\Users\Administrator\Desktop\flag.txt
+
+flag: ingehack{dc_pwn3d_#b82e4f17_l1v3off}
+
+visible: true
+deployed: true

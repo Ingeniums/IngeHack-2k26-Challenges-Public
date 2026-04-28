@@ -1,0 +1,13 @@
+{
+  "name": "safeeval-challenge",
+  "version": "1.0.0",
+  "description": "CTF challenge server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "vm2": "3.10.0"
+  }
+}

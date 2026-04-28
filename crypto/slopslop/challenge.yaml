@@ -1,0 +1,18 @@
+# KEEP THIS FILE IN THE ROOT OF YOUR CHALLENGE DIRECTORY IN THE GIT
+name: SlopSLop
+author: vuln3rat0r
+difficulty: easy
+
+description: |-
+  flag format{secret_msg} ;
+
+
+flag: 'ingehack{gg_lwld_nta_thsilha_crypto}'
+
+provide:
+  - dist/chall.py
+  - dist/ct1.txt
+  - dist/ct2.txt
+
+visible: true
+deployed: false

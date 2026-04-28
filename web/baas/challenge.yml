@@ -1,0 +1,26 @@
+# KEEP THIS FILE IN THE ROOT OF YOUR CHALLENGE DIRECTORY IN THE GIT
+name: BAAS
+author: sleep well
+difficulty: easy
+
+description: |-
+  Browser as a service, don't forget a browser without google maps is a delta browser
+
+  link : https://baas.ctf.ingeniums.club/
+
+flag: 'ingehack{l0c4lh0st_1s_st1ll_4_pl4c3_y0u_c4n_br0ws3}'
+
+containers:
+  main:
+    challenge:
+      build: app
+      ports:
+        - 9898
+
+expose:
+  main:
+    - target: 9898
+      http: baas.ctf.ingeniums.club
+
+visible: true
+deployed: true

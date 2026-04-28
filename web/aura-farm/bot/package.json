@@ -1,0 +1,14 @@
+{
+  "name": "challenge2-playwright-bot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simple exposed Playwright visitor bot for Challenge 2",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "playwright": "^1.52.0"
+  }
+}

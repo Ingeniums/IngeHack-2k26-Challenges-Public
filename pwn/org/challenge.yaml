@@ -1,0 +1,30 @@
+name: org
+author: 4ym3n
+difficulty: easy
+
+description: |-
+  We are used to reversing VMs. Now it is your turn to pwn one.
+  `{{ nc }}`
+
+provide:
+  - chall
+  - main.c
+  - Dockerfile
+  - entrypoint.sh
+
+flag: ingehack{rev_2_pwn_2_own}
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 1337
+      readOnlyRootFilesystem: false
+expose:
+  main:
+    - target: 1337
+      tcp: org.ctf.ingeniums.club
+
+visible: true
+deployed: true

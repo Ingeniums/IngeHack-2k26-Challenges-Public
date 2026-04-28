@@ -1,0 +1,62 @@
+name: rumpelstiltskin
+author: hxuu
+difficulty: medium
+description: |-
+  When the first Child is born, the imp returns. Where to, then?
+
+  App: http://rumpelstiltskin-app.ctf.ingeniums.club
+
+  Bot: http://rumpelstiltskin-bot.ctf.ingeniums.club
+
+flag: 'ingehack{w1NdoW_nam3_w0n_Th3_game_<3}'
+
+provide:
+  - ./handout/bot.js
+  - ./handout/server.js
+
+containers:
+  victim:
+    challenge:
+      build: app
+      ports:
+        - 3000
+      environment:
+        PORT: "3000"
+        OAUTH_URL: "http://rumpelstiltskin-auth.ctf.ingeniums.club"
+        PUBLIC_OAUTH_URL: "http://rumpelstiltskin-auth.ctf.ingeniums.club"
+        FLAG: "ingehack{w1NdoW_nam3_w0n_Th3_game_<3}"
+        BOT_SECRET: "428257a2e7735efe7acfe48d0c6b3e101f5994a6f77c204c054bd7dec77ec6d7"
+      readOnlyRootFilesystem: false
+  oauth-provider:
+    challenge:
+      build: auth
+      ports:
+        - 3001
+      environment:
+        PORT: "3001"
+      readOnlyRootFilesystem: false
+  bot:
+    challenge:
+      build: bot
+      ports:
+        - 3004
+      environment:
+        PORT: "3004"
+        OAUTH_URL: "http://rumpelstiltskin-auth.ctf.ingeniums.club"
+        VICTIM_URL: "http://rumpelstiltskin-app.ctf.ingeniums.club"
+        BOT_SECRET: "428257a2e7735efe7acfe48d0c6b3e101f5994a6f77c204c054bd7dec77ec6d7"
+      readOnlyRootFilesystem: false
+
+expose:
+  victim:
+    - target: 3000
+      http: rumpelstiltskin-app.ctf.ingeniums.club
+  oauth-provider:
+    - target: 3001
+      http: rumpelstiltskin-auth.ctf.ingeniums.club
+  bot:
+    - target: 3004
+      http: rumpelstiltskin-bot.ctf.ingeniums.club
+
+visible: true
+deployed: true

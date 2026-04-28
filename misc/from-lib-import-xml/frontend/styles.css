@@ -1,0 +1,226 @@
+:root {
+  --bg: #f4efe7;
+  --panel: rgba(255, 250, 242, 0.88);
+  --ink: #142028;
+  --muted: #5f6b70;
+  --accent: #cd5a2d;
+  --line: rgba(20, 32, 40, 0.12);
+  --shadow: 0 28px 70px rgba(55, 38, 20, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Manrope", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(205, 90, 45, 0.24), transparent 26%),
+    radial-gradient(circle at 86% 14%, rgba(46, 122, 116, 0.18), transparent 22%),
+    linear-gradient(180deg, #f3ede3 0%, #e7d9c5 100%);
+}
+
+.page-shell {
+  width: min(760px, calc(100% - 32px));
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 0;
+}
+
+.form-panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 30px;
+  background: var(--panel);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+  width: 100%;
+  padding: 34px;
+  animation: rise-in 500ms ease-out both;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.form-header h2 {
+  margin: 0;
+  font-family: "Fraunces", serif;
+  line-height: 0.96;
+  letter-spacing: -0.03em;
+  font-size: clamp(2rem, 3vw, 3rem);
+}
+
+.registration-form {
+  display: grid;
+  gap: 28px;
+}
+
+.form-header {
+  display: grid;
+  gap: 8px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.field-card {
+  display: grid;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.74), rgba(251, 244, 234, 0.9));
+  border: 1px solid rgba(20, 32, 40, 0.08);
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.field-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(205, 90, 45, 0.24);
+  box-shadow: 0 20px 30px rgba(91, 58, 23, 0.08);
+}
+
+.field-card span {
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+input,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(20, 32, 40, 0.12);
+  border-radius: 14px;
+  background: rgba(255, 252, 248, 0.98);
+  padding: 14px 15px;
+  font: inherit;
+  color: var(--ink);
+  transition:
+    border-color 140ms ease,
+    box-shadow 140ms ease;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: rgba(205, 90, 45, 0.65);
+  box-shadow: 0 0 0 4px rgba(205, 90, 45, 0.14);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.form-footer {
+  display: grid;
+  gap: 12px;
+}
+
+.submit-button {
+  border: 0;
+  border-radius: 18px;
+  min-height: 56px;
+  padding: 0 24px;
+  width: fit-content;
+  font: inherit;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fff7ef;
+  background:
+    linear-gradient(135deg, #ce5a2d, #a74022);
+  cursor: pointer;
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    opacity 140ms ease;
+  box-shadow: 0 18px 30px rgba(167, 64, 34, 0.2);
+}
+
+.submit-button:hover {
+  transform: translateY(-2px) scale(1.01);
+}
+
+.submit-button:disabled {
+  cursor: wait;
+  opacity: 0.76;
+  transform: none;
+}
+
+.form-status {
+  min-height: 1.6rem;
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.form-status.is-error {
+  color: #a51e1e;
+}
+
+.form-status.is-success {
+  color: #185d50;
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 720px) {
+  .page-shell {
+    width: min(100% - 20px, 1180px);
+    padding: 18px 0 28px;
+  }
+
+  .form-panel {
+    border-radius: 24px;
+    padding: 22px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .full-width {
+    grid-column: auto;
+  }
+
+  .submit-button {
+    width: 100%;
+  }
+}

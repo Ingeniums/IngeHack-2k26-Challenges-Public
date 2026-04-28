@@ -1,0 +1,30 @@
+name: board puzzles
+author: t4k1
+description: |-
+  ctfs are too boring for you, and you want to solve some puzzles?        
+
+  we got you, enjoy it. 
+  
+  {{ url }}
+
+flag: ingehack{4u70m471n6_things_15_41w4y5_fun_right?564651651695615}
+difficulty: medium
+
+containers:
+  app:
+    challenge:
+      build: .
+      resources:
+        limits:
+          cpu: 100m
+          memory: 500M
+      environment:
+        JWT_SECRET: 'zkxcljoiqw56s5d4+4a6c9+8we4qwe'
+      ports: [6701]
+      readOnlyRootFilesystem: false
+
+expose:
+  app:
+    - target: 6701
+      http: board-puzzles.ctf.ingeniums.club
+visible: true

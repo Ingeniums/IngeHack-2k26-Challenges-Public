@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}{{ app_name }} Browser Worker{% endblock %}
+
+{% block content %}
+  <section class="panel">
+    <span class="pill">Remote Renderer</span>
+    <h1>Ask the browser worker to fetch a page for you.</h1>
+    <p class="lead">
+      Submit a full URL and the worker will open it, follow redirects, and show the final response body.
+    </p>
+
+    <form class="stack" method="post">
+      <div>
+        <label for="url">Link</label>
+        <input
+          id="url"
+          name="url"
+          type="url"
+          placeholder="https://example.com/"
+          value="{{ target }}"
+          required
+        />
+      </div>
+      <button type="submit">Render Link</button>
+    </form>
+
+    {% if error %}
+      <div class="error" style="margin-top: 16px;">{{ error }}</div>
+    {% endif %}
+
+    {% if result %}
+      <section class="result-box">
+        <iframe
+          id="rendered-output"
+          title="Rendered Output"
+          style="width: 100%; min-height: 38rem; border: 1px solid #d9cec1; border-radius: 12px; background: #fff;"
+        ></iframe>
+        <script>
+          document.getElementById("rendered-output").srcdoc = {{ result.body | tojson }};
+        </script>
+      </section>
+    {% endif %}
+  </section>
+{% endblock %}

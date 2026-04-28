@@ -1,0 +1,38 @@
+name: mario kart
+author: sleep well
+difficulty: medium
+
+description: |-
+  I keep dreaming about getting the Rainbow Road Golden Kart, but it costs more
+  coins than a fresh racer account can afford. Can you get it for me ?
+
+  link : https://mario-kart.ctf.ingeniums.club/
+
+flag: 'ingehack{4s_yoU_saw_R3QueST$_rACE_4S_gOod_a$_C4rS}'
+
+provide:
+  - chall.zip
+
+containers:
+  main:
+    challenge:
+      build: app
+      ports:
+        - 9797
+      environment:
+        DB_PATH: '/data/wallet.db'
+      volumes:
+        - name: app-data
+          emptyDir: {}
+      volumeMounts:
+        - name: app-data
+          mountPath: /data
+      readOnlyRootFilesystem: false
+
+expose:
+  main:
+    - target: 9797
+      http: mario-kart.ctf.ingeniums.club
+
+visible: true
+deployed: true

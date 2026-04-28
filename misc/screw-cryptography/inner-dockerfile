@@ -1,0 +1,32 @@
+FROM ubuntu:24.04
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y openssl gcc nano && \
+    rm -rf /var/lib/apt/lists/*
+
+# Users
+RUN useradd -m -s /bin/bash player && \
+    echo "player:player" | chpasswd
+
+RUN useradd -m -s /bin/bash priv && \
+    PRIV_PASS=$(openssl rand -base64 32) && \
+    echo "priv:${PRIV_PASS}" | chpasswd
+
+# Challenge + flag
+COPY chall /home/priv/chall
+COPY flag.txt /home/priv/flag.txt
+COPY chall.c /home/player/chall.c
+
+RUN chown priv:priv /home/priv/chall && \
+    chmod 4755 /home/priv/chall
+
+RUN chown priv:priv /home/priv/flag.txt && \
+    chmod 400 /home/priv/flag.txt
+
+RUN chmod 755 /home/priv
+RUN ln -s /home/priv/chall /home/player/chall
+
+USER player
+WORKDIR /home/player
+CMD ["/bin/bash"]

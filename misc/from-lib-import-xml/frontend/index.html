@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="form-panel">
+        <form id="registration-form" class="registration-form" novalidate>
+          <div class="form-header">
+            <p class="eyebrow">Registration Form</p>
+            <h2>User Information</h2>
+          </div>
+
+          <div class="form-grid">
+            <label class="field-card">
+              <span>First name</span>
+              <input type="text" name="firstName" placeholder="Amina" required />
+            </label>
+
+            <label class="field-card">
+              <span>Last name</span>
+              <input type="text" name="lastName" placeholder="Rahmani" required />
+            </label>
+
+            <label class="field-card">
+              <span>Email</span>
+              <input
+                type="email"
+                name="email"
+                placeholder="amina@example.com"
+                required
+              />
+            </label>
+
+            <label class="field-card">
+              <span>Phone</span>
+              <input
+                type="tel"
+                name="phone"
+                placeholder="+1 555 123 4567"
+                required
+              />
+            </label>
+
+            <label class="field-card">
+              <span>Date of birth</span>
+              <input type="date" name="dateOfBirth" required />
+            </label>
+
+            <label class="field-card full-width">
+              <span>Address</span>
+              <textarea
+                name="address"
+                rows="4"
+                placeholder="221B Baker Street, London"
+                required
+              ></textarea>
+            </label>
+          </div>
+
+          <div class="form-footer">
+            <button type="submit" class="submit-button">Submit Registration</button>
+            <p id="form-status" class="form-status" aria-live="polite"></p>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

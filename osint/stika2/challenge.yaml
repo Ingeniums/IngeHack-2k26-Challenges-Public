@@ -1,0 +1,14 @@
+name: "stika 2"
+author: "sirmoncef"
+difficulty: "Hard"
+
+description: |-
+  After the events of last year, Stika disappeared from the surface. However, in recent weeks, new digital footprints have revealed his activity within a small group involved in the attempted sale of a valuable painting stolen from a private collection.
+
+  They are highly cautious and aware of their surroundings, sometimes remaining out of sight while coordinating their actions, and may operate around you without drawing attention.
+
+  Your mission is to follow Stika and his network’s traces and determine the location where the transaction is planned, in order to assist in bringing them to justice.
+
+flag: "ingehack{Oriental_Hotel}"
+
+visible: true

@@ -1,0 +1,14 @@
+name: evil
+author: 4ym3n
+difficulty: hard
+
+description: |-
+    Active Directory
+    - Submit the flag in C:\Usere\Administrator\Desktop\flag.txt.
+    - Open ticket to get your instance.
+    - Open ticket to get your instance.
+
+flag: ingehack{4dm1n_c0ntr0l_#a3f7d921_pwn3d}
+
+visible: true
+deployed: true

@@ -1,0 +1,40 @@
+# KEEP THIS FILE IN THE ROOT OF YOUR CHALLENGE DIRECTORY IN THE GIT
+name: dabidobi
+author: koyphshi
+difficulty: medium
+
+description: |-
+  Related Moduli & Rotated Vectors.
+
+  Stage 1 gives three related RSA moduli:
+    N0 = p*q,
+    N1 = (p + λ1)*(q + λ1),
+    N2 = (p + λ2)*(q + λ2),
+  with hidden shifts λ1 and λ2, plus ciphertext c.
+  Recover the decrypted Stage 1 message to continue.
+
+  Connect with:
+
+  `{{ nc }}`
+
+flag: "ingehack{i_love_cats_i_swear_to_god}"
+
+provide:
+  - phase1_client.py
+  - PHASE1_SHARE_NOTE.md
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 4000
+      readOnlyRootFilesystem: false
+
+expose:
+  main:
+    - target: 4000
+      tcp: dabidobi.ctf.ingeniums.club
+
+visible: true
+deployed: true

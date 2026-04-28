@@ -1,0 +1,14 @@
+name: tsriF
+author: koyphshi
+difficulty: easy
+description: |-
+
+  I'm thinking Miku, Miku
+
+
+flag: "ingehack{P3t_M3ku_0r_Els3_:3}"
+provide:
+  - chall.py
+  - data.txt
+visible: true
+deployed: true

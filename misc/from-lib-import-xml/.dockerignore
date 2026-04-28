@@ -1,0 +1,8 @@
+.git
+.gitignore
+backend/.env
+**/node_modules
+npm-debug.log
+Dockerfile
+challenge.yaml
+README.md

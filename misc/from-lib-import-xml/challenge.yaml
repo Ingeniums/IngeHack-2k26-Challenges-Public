@@ -1,0 +1,37 @@
+name: from-lib-import-xml
+author: t4k1
+description: |-
+  one of our dev team members vibe coded the registration form       
+  nothing bad could happen 
+
+
+  http://registration-form.ctf.ingeniums.club
+
+flag: ingehack{registeration_form_leakage_846896548998468}
+difficulty: easy
+provide:
+  - src.zip
+
+containers:
+  app:
+    challenge:
+      build: .
+      resources:
+        limits:
+          cpu: 100m
+          memory: 256M
+      environment:
+        HOST: "0.0.0.0"
+        PORT: "3000"
+        ALLOWED_ORIGIN: "*"
+        GOOGLE_APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzf__2G-CHeYdfZlspbMA4wHiwKX9GnlMjHC6tH_o-Sc9m5kAy5aEJSswa5T7GeJEDP/exec"
+      ports: [3000]
+      readOnlyRootFilesystem: false
+
+expose:
+  app:
+    - target: 3000
+      http: registration-form.ctf.ingeniums.club
+
+visible: true
+deployed: true

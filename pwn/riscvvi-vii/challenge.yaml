@@ -1,0 +1,33 @@
+name: riscVI-VII
+author: nothoudaifa
+difficulty: medium
+
+description: |-
+  solviniiiii
+  
+  `{{ nc }}`
+
+flag: ingehack{ggs_you_found_the_flag__676767}
+
+provide:
+  - kernel
+  - fs.img
+  - run
+  - patch.diff
+  - Dockerfile
+  - makefile.c
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 1337
+      readOnlyRootFilesystem: false
+expose:
+  main:
+    - target: 1337
+      tcp: riscvi-vii.ctf.ingeniums.club
+
+visible: true
+deployed: true

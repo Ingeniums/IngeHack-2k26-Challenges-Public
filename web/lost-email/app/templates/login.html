@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Login - {{ app_name }}</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #241914;
+        --muted: #765f52;
+        --paper: #fff8ec;
+        --paper-strong: #fffdf8;
+        --stamp: #b6422f;
+        --stamp-dark: #7f271f;
+        --line: rgba(60, 39, 26, 0.18);
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Georgia, "Times New Roman", serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at 16% 18%, rgba(182, 66, 47, 0.17), transparent 28%), radial-gradient(circle at 82% 12%, rgba(233, 174, 88, 0.26), transparent 30%),
+          linear-gradient(135deg, #ead7b8 0%, #f9ecd4 48%, #d9bea0 100%);
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background-image: linear-gradient(rgba(36, 25, 20, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(36, 25, 20, 0.035) 1px, transparent 1px);
+        background-size: 28px 28px;
+        mix-blend-mode: multiply;
+      }
+      .wrap {
+        width: min(760px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 56px 0;
+      }
+      .envelope {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(180deg, var(--paper-strong), var(--paper));
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        box-shadow: 0 30px 80px rgba(64, 37, 20, 0.22);
+        padding: clamp(28px, 6vw, 48px);
+      }
+      .envelope::after {
+        content: "";
+        position: absolute;
+        inset: auto -12% -42% -12%;
+        height: 64%;
+        background:
+          linear-gradient(135deg, transparent 49.6%, rgba(127, 39, 31, 0.12) 50%, transparent 50.4%), linear-gradient(45deg, transparent 49.6%, rgba(127, 39, 31, 0.12) 50%, transparent 50.4%);
+        pointer-events: none;
+      }
+      .content {
+        position: relative;
+        z-index: 1;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+        color: var(--stamp-dark);
+        font:
+          700 0.78rem/1.2 "Courier New",
+          monospace;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 999px;
+        background: var(--stamp);
+        box-shadow: 0 0 0 6px rgba(182, 66, 47, 0.12);
+      }
+      h1 {
+        max-width: 620px;
+        margin: 0;
+        font-size: clamp(2.3rem, 8vw, 5rem);
+        line-height: 0.92;
+        letter-spacing: -0.06em;
+      }
+      .lead {
+        max-width: 600px;
+        margin: 24px 0 0;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 2vw, 1.25rem);
+        line-height: 1.6;
+      }
+      .panel {
+        display: grid;
+        gap: 18px;
+        margin-top: 34px;
+        padding: 22px;
+        border: 1px dashed rgba(127, 39, 31, 0.38);
+        border-radius: 20px;
+        background: rgba(255, 253, 248, 0.72);
+      }
+      label {
+        display: block;
+        margin: 0 0 7px;
+        color: var(--stamp-dark);
+        font:
+          700 0.78rem/1.2 "Courier New",
+          monospace;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      input {
+        width: 100%;
+        min-height: 50px;
+        padding: 10px 13px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fffdf8;
+        color: var(--ink);
+        font:
+          1rem/1.2 "Courier New",
+          monospace;
+      }
+      .button-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      a.button,
+      button.button {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        padding: 0 20px;
+        border: 0;
+        border-radius: 999px;
+        background: var(--stamp);
+        color: #fffdf8;
+        cursor: pointer;
+        font:
+          700 0.95rem/1 "Courier New",
+          monospace;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+      .button.secondary {
+        background: transparent;
+        color: var(--stamp-dark);
+        border: 1px solid rgba(127, 39, 31, 0.35);
+      }
+      .flash {
+        margin: 18px 0 0;
+        padding: 14px 16px;
+        border-radius: 14px;
+        background: rgba(255, 253, 248, 0.82);
+        border: 1px solid var(--line);
+        color: var(--stamp-dark);
+      }
+      @media (max-width: 640px) {
+        .wrap {
+          padding: 24px 0;
+        }
+        .envelope {
+          border-radius: 20px;
+        }
+        a.button,
+        button.button {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <section class="envelope">
+        <div class="content">
+          <div class="eyebrow"><span class="dot"></span> identity check</div>
+          <h1>Login to {{ app_name }}.</h1>
+          <p class="lead">Enter your user and password to continue to email verification.</p>
+
+          {% with messages = get_flashed_messages(with_categories=true) %} {% if messages %} {% for category, message in messages %}
+          <div class="flash {{ category }}">{{ message }}</div>
+          {% endfor %} {% endif %} {% endwith %}
+
+          <form class="panel" method="post" action="{{ url_for('login') }}">
+            <div>
+              <label for="user">User</label>
+              <input id="user" name="user" type="text" autocomplete="username" required autofocus />
+              <!-- <input id="user" name="user" type="text" value="koyphshi@ingenieums.club" /> -->
+            </div>
+
+            <div>
+              <label for="pass">Pass</label>
+              <input id="pass" name="pass" type="password" autocomplete="current-password" required />
+              <!-- <input id="pass" name="pass" type="password" value="anti_ai_human" /> -->
+            </div>
+
+            <div class="button-row">
+              <button class="button" type="submit">Continue</button>
+              <a class="button secondary" href="{{ url_for('index') }}">Back</a>
+            </div>
+          </form>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

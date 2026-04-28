@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Register - {{ app_name }}{% endblock %}
+
+{% block content %}
+  <section class="auth">
+    <div class="page-head">
+      <h1>Create a racer account.</h1>
+      <p class="lead">Registration includes {{ bonus }} in garage credit after claiming.</p>
+    </div>
+
+    <form class="card stack auth-card" method="post" action="{{ url_for('register_form') }}">
+      <div>
+        <label for="username">Username</label>
+        <input id="username" name="username" autocomplete="username" required autofocus />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" autocomplete="new-password" required />
+      </div>
+      <button type="submit">Register</button>
+      <a class="button secondary" href="{{ url_for('login_page') }}">Login instead</a>
+    </form>
+  </section>
+{% endblock %}

@@ -1,0 +1,34 @@
+name: screw-cryptography
+author: nothoudaifa
+difficulty: easy
+
+description: |-
+  screw cryptography, i can predict randomness
+
+  you connect to this challenge using ssh with player:player at port 6767
+  
+  `ssh player@screw-crypto.ctf.ingeniums.club -p 6767`
+
+flag: ingehack{flag_goes_here_go_submit_to_get_ur_points_ggs}
+instancePerTeam: false
+instanceTimeout: 600000
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 6767
+      readOnlyRootFilesystem: false
+      environment:
+        ACR_USERNAME: ${ACR_USERNAME}
+        ACR_PASSWORD: ${ACR_PASSWORD}
+      privileged: true
+
+expose:
+  main:
+    - target: 6767
+      tcp: screw-crypto.ctf.ingeniums.club
+
+visible: true
+deployed: true

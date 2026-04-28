@@ -1,0 +1,19 @@
+name: Amateur Hour
+author: t4k1
+difficulty: medium
+
+description: |-
+  at 1776851984686049083020 (i know i know). give or take 100 picoseconds :P, my friend encrypted my flag, and i cant read it anymore :((          
+  
+  my friend said smth about a modified encryption he used, smth about bytes related to each other?            
+  
+  i m a bad reverser and i really hate haskell, good thing this is a ctf and i have a the working force :)              
+
+flag: ingehack{streaming_c1ph3r5_4r3_w34k_bu7_h45k3ll_15_n07_156536489156365456}
+
+provide:
+  - flag.txt
+  - main
+  - main.dump-cmm
+
+visible: true

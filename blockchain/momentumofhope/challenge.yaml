@@ -1,0 +1,17 @@
+name: Momentum of Hope
+author: 0xbrivan
+difficulty: easy
+
+description: |-
+  Bob had been grinding through blockchain challenges, but progress was not on his side. Frustrated and running low on energy, he was about to give up.
+
+  Then he overheard whispers about a mysterious transaction on Sepolia: 0x9c4fb8b23dce32e03443f74ac453be8ee53c929713d5a5302ac8b26ebe0292f4
+
+  They say it might contain exactly what he needs — a hidden hope to keep going. Bob believes this transaction holds the key to his comeback. Can you help him regain his momentum?
+
+
+flag: ingehack{G0T_hYp3D_$olV1Ng_V3RY_3aCH_ChALL3nGe_TrY_oW_OTH3r_Ch4ll3nG3$}
+
+
+visible: true
+deployed: true

@@ -1,0 +1,6 @@
+services:
+  app:
+    build: ./app
+    ports:
+      - "9797:9797"
+    restart: unless-stopped

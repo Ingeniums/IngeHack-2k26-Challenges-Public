@@ -1,0 +1,12 @@
+name: Shadow In The Back
+author: vuln3rat0r
+difficulty: Hard
+description: >-
+  I found this picture in my grandpa's albums, dated April 8, 2021. I'm
+  wondering where this place is and exactly when he took this picture! flag
+  format ingehack{xx.xxx,xx.xxx,HH:MM_UTC+K} for example
+  ingehack{35.659,138.700,14:30_UTC+9}
+flag: 'ingehack{41.776,-93.727,13:15_UTC-5}'
+provide:
+  - place.jpg
+visible: true

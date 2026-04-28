@@ -1,0 +1,19 @@
+services:
+  app:
+    build: ./app
+    ports:
+      - "8090:8000"
+    networks:
+      default:
+        aliases:
+          - mainapp
+  payment:
+    build: ./payment
+    ports:
+      - "8081:8000"
+  bot:
+    build: ./bot
+    network_mode: host
+    depends_on:
+      - app
+      - payment

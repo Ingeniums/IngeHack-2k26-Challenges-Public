@@ -1,0 +1,44 @@
+# KEEP THIS FILE IN THE ROOT OF YOUR CHALLENGE DIRECTORY IN THE GIT
+name: rot13
+author: koyphshi
+difficulty: medium
+
+description: |-
+  A server ran a commitment scheme on 3 secret values.
+  For each value P_i it published:
+
+      Q_i = k_i * P_i   (k_i public)
+
+  The server was then supposed to reveal all P_i values.
+  But it lost them.
+
+  Your job: recover all P_i from the commitments.
+  The k_i values are small — that is the weakness.
+
+  But first — prove yourself by breaking the LCG.
+
+  Connect with:
+
+  `{{ nc }}`
+
+flag: "ingehack{i_h4d_4_pr0bl3m_w1th_th3_ch4ll3ng3_but_wh3n_z4hr0_p4r1514n_g30d_gd4m1_1t_w0rk3d}"
+
+provide:
+  - phase1_client.py
+  - PHASE1_SHARE_NOTE.md
+
+containers:
+  main:
+    challenge:
+      build: .
+      ports:
+        - 4000
+      readOnlyRootFilesystem: false
+
+expose:
+  main:
+    - target: 4000
+      tcp: rot13.ctf.ingeniums.club
+
+visible: true
+deployed: true

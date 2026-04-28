@@ -1,0 +1,23 @@
+name: ntfs
+author: ayanokoji
+difficulty: Easy
+
+description: |
+  You are provided with artifacts extracted from a Windows system.
+
+  A file was handled on the system before being removed. Your task is to analyze the artifacts and reconstruct its history to determine its state at the time it disappeared.
+
+  What was the full path of the file at the time it was deleted?
+  What was the file’s original name when it first appeared?
+  How many times was the file renamed or moved?
+  Which current folder is associated with that file if relying on the present filesystem state?
+
+  ingehack{full-path_original-name_operation-count_misleading-folder}
+
+flag: ingehack{.\ProgramData\Windows\Caches\indexer.db_layout.bin_4_.\ProgramData\Windows\Telemetry\Stage\Session_00001}
+
+provide:
+  - chall3.zip
+
+visible: true
+deploy: false

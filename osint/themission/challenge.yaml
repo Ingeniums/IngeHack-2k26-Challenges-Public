@@ -1,0 +1,13 @@
+name: "The Mission 1"
+author: "sirmoncef"
+difficulty: "Easy"
+
+description: |-
+ There are signs of a secret money laundering operation using multiple companies to hide illegal activity.
+
+ One name keeps appearing: John Feldborg.
+
+ We don’t know much about him, but he could be the key to everything.
+
+flag: "ingehack{the_hunt_begins}"
+visible: true

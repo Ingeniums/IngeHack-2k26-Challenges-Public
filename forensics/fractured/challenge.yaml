@@ -1,0 +1,15 @@
+name: "Fractured"
+author: "sirmoncef"
+difficulty: "Medium"
+
+description: |-
+  A mixed capture was recorded during communication , analyze and uncover what happened.
+
+  
+
+flag: "ingehack{ch4rikat_elra7a_22}"
+
+provide:
+  - chall.pcap
+
+visible: true

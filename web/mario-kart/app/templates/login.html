@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Login - {{ app_name }}{% endblock %}
+
+{% block content %}
+  <section class="auth">
+    <div class="page-head">
+      <h1>Login to your garage.</h1>
+      <p class="lead">Return to your racer wallet and finish checkout.</p>
+    </div>
+
+    <form class="card stack auth-card" method="post" action="{{ url_for('login_form') }}">
+      <div>
+        <label for="username">Username</label>
+        <input id="username" name="username" autocomplete="username" required autofocus />
+      </div>
+      <div>
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" autocomplete="current-password" required />
+      </div>
+      <button type="submit">Login</button>
+      <a class="button secondary" href="{{ url_for('register_page') }}">Create account</a>
+    </form>
+  </section>
+{% endblock %}

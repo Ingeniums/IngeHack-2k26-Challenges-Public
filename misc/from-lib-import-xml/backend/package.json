@@ -1,0 +1,12 @@
+{
+  "name": "registration-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Node backend that forwards registration requests to Google Apps Script",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

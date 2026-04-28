@@ -1,0 +1,12 @@
+# KEEP THIS FILE IN THE ROOT OF YOUR CHALLENGE DIRECTORY IN THE GIT
+name: heru
+author: koyphshi
+difficulty: easy
+description: |-
+  heru? oh haru haru, anyway my cat is waiting for u :3
+flag: "ingehack{Say_M03w_:3}"
+provide:
+  - chall.py
+  - data.txt
+visible: true
+deployed: true

@@ -1,0 +1,15 @@
+name: ride
+author: koyphshi
+difficulty: easy
+description: |-
+  Futaba has been holding onto something for too long. She reaches out to Kou, but the message never quite lands. Will she give up, or give everything?
+
+  nc 20.250.15.36 31339
+flag: "ingehack{Fl0w3rs_4r3_m34nt_t0_bl00m_n0t_t0_dry_up_th4ts_wh4t_1_ch00s3_t0_b3l13v3}"
+provide:
+  - Futaba.sol
+  - Kou.sol
+  - IMessenger.sol
+  - Setup.sol
+visible: true
+deployed: true

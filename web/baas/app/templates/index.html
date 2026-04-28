@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ app_name }} Overview{% endblock %}
+
+{% block content %}
+  <section class="grid centered-grid" aria-label="Browser facts">
+    {% for fact in facts %}
+      <article class="panel fact-card">
+        <strong>{{ fact.engine }} Engine</strong>
+        <div class="fact-title">{{ fact.name }}</div>
+        <div class="stat">{{ fact.share }}</div>
+        <p>{{ fact.note }}</p>
+      </article>
+    {% endfor %}
+  </section>
+{% endblock %}

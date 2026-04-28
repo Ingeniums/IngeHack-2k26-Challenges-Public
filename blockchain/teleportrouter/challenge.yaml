@@ -1,0 +1,18 @@
+name: TeleportRouter
+author: 0xbrivan
+difficulty: Medium
+
+description: |-
+  I have created a blazing fast router, but I think I made it TOO FAST
+
+  nc 20.250.15.36 31337
+
+flag: ingehack{cAreFuLl_0F_funcTiOns_seLECToRS}
+
+
+provide:
+  - Setup.sol
+  - TeleportRouter.sol
+
+visible: true
+deployed: true

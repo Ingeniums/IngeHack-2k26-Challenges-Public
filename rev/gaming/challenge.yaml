@@ -1,0 +1,22 @@
+name: gaming
+author: t4k1
+difficulty: medium
+
+description: |-
+  wake up, a new ctf challenge has dropped     
+  
+  devs added new features to the os, but i cant seem to find them?     
+
+  will you help me :)    
+
+  here is a hint:     
+  https://github.com/t-88/doors-os
+
+
+flag: ingehack{k3rn3l_l3v3l_g4m1n6_g0_brrrrrrrrrrrr8189165156615616551645}
+
+provide:
+  - os_img.bin
+  - run.sh
+
+visible: true
